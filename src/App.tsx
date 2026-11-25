@@ -129,7 +129,7 @@ export default function App() {
       <header className="border-b border-slate-200 bg-white">
         <div className="max-w-5xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between gap-8">
           <a
-            href="/"
+            href="./"
             className="text-base sm:text-lg font-bold tracking-tight text-slate-900 whitespace-nowrap shrink-0 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-blue-600 rounded"
           >
             Simple Currency Calculator
