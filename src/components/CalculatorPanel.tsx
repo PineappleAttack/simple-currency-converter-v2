@@ -14,10 +14,10 @@ import {
   formatCheckTimestamp,
   formatConvertedAmount,
   formatExchangeRate,
-  getCurrencyDisplayName,
   type RateStatusTone,
 } from '../lib/rates';
 import type { ConverterUserState, RatesCache } from '../lib/storage';
+import { CurrencySelect } from './CurrencySelect';
 
 interface CalculatorPanelProps {
   state: ConverterUserState;
@@ -157,26 +157,13 @@ export function CalculatorPanel({
 
       {/* Currency Selectors & Swap */}
       <div className="grid grid-cols-1 sm:grid-cols-[1fr_auto_1fr] gap-3 items-end">
-        <div>
-          <label
-            htmlFor="from-currency"
-            className="block text-sm font-medium text-slate-700 mb-2"
-          >
-            From
-          </label>
-          <select
-            id="from-currency"
-            value={state.from}
-            onChange={(e) => onFromChange(e.target.value)}
-            className="w-full h-11 px-3 rounded-lg border border-slate-300 bg-white text-sm font-medium text-slate-900 focus:border-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-600/20 transition-colors"
-          >
-            {availableCurrencies.map((code) => (
-              <option key={code} value={code}>
-                {getCurrencyDisplayName(code)}
-              </option>
-            ))}
-          </select>
-        </div>
+        <CurrencySelect
+          id="from-currency"
+          label="From"
+          value={state.from}
+          currencies={availableCurrencies}
+          onChange={onFromChange}
+        />
 
         <div className="flex justify-center">
           <button
@@ -194,26 +181,13 @@ export function CalculatorPanel({
           </button>
         </div>
 
-        <div>
-          <label
-            htmlFor="to-currency"
-            className="block text-sm font-medium text-slate-700 mb-2"
-          >
-            To
-          </label>
-          <select
-            id="to-currency"
-            value={state.to}
-            onChange={(e) => onToChange(e.target.value)}
-            className="w-full h-11 px-3 rounded-lg border border-slate-300 bg-white text-sm font-medium text-slate-900 focus:border-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-600/20 transition-colors"
-          >
-            {availableCurrencies.map((code) => (
-              <option key={code} value={code}>
-                {getCurrencyDisplayName(code)}
-              </option>
-            ))}
-          </select>
-        </div>
+        <CurrencySelect
+          id="to-currency"
+          label="To"
+          value={state.to}
+          currencies={availableCurrencies}
+          onChange={onToChange}
+        />
       </div>
 
       {/* Hairline Divider */}

@@ -1,7 +1,6 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { RefreshCw } from 'lucide-react';
 import { CalculatorPanel } from './components/CalculatorPanel';
-import { CrossRatesPanel } from './components/CrossRatesPanel';
 import {
   buildSortedCurrencyList,
   ensureExchangeRates,
@@ -112,7 +111,7 @@ export default function App() {
     <div className="min-h-screen flex flex-col bg-slate-50 text-slate-900">
       {/* Top Bar */}
       <header className="border-b border-slate-200 bg-white">
-        <div className="max-w-5xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between gap-8">
+        <div className="max-w-3xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between gap-8">
           <a
             href="./"
             className="text-base sm:text-lg font-bold tracking-tight text-slate-900 whitespace-nowrap shrink-0 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-blue-600 rounded"
@@ -136,40 +135,25 @@ export default function App() {
       </header>
 
       {/* Main Workspace */}
-      <main className="flex-1 w-full max-w-5xl mx-auto px-4 sm:px-6 py-8 sm:py-10">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
-          <div className="lg:col-span-7">
-            <CalculatorPanel
-              state={converterState}
-              availableCurrencies={availableCurrencies}
-              ratesCache={ratesSnapshot.cache}
-              statusMessage={ratesSnapshot.statusMessage}
-              statusTone={ratesSnapshot.tone}
-              isRefreshing={isRefreshing}
-              onAmountChange={handleAmountChange}
-              onFromChange={handleFromChange}
-              onToChange={handleToChange}
-              onSwap={handleSwap}
-              onReset={handleReset}
-            />
-          </div>
-
-          <div className="lg:col-span-5">
-            <CrossRatesPanel
-              amountRaw={converterState.amount}
-              fromCurrency={converterState.from}
-              toCurrency={converterState.to}
-              availableCurrencies={availableCurrencies}
-              ratesCache={ratesSnapshot.cache}
-              onSelectToCurrency={handleToChange}
-            />
-          </div>
-        </div>
+      <main className="flex-1 w-full max-w-3xl mx-auto px-4 sm:px-6 py-8 sm:py-12">
+        <CalculatorPanel
+          state={converterState}
+          availableCurrencies={availableCurrencies}
+          ratesCache={ratesSnapshot.cache}
+          statusMessage={ratesSnapshot.statusMessage}
+          statusTone={ratesSnapshot.tone}
+          isRefreshing={isRefreshing}
+          onAmountChange={handleAmountChange}
+          onFromChange={handleFromChange}
+          onToChange={handleToChange}
+          onSwap={handleSwap}
+          onReset={handleReset}
+        />
       </main>
 
       {/* Quiet Footer */}
       <footer className="border-t border-slate-200/80 py-5 px-4 sm:px-6">
-        <div className="max-w-5xl mx-auto text-center text-xs text-slate-500">
+        <div className="max-w-3xl mx-auto text-center text-xs text-slate-500">
           Rates via ExchangeRate-API (open.er-api.com) with 24-hour local cache and offline fallback · Preferences saved locally in your browser
         </div>
       </footer>
