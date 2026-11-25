@@ -1,0 +1,6 @@
+{
+  "name": "Simple Currency Calculator",
+  "description": "Persistent currency converter with live exchange rates, 24-hour localStorage caching, offline fallback, and instant cross-rate comparison.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
