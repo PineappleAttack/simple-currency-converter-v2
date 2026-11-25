@@ -17,18 +17,15 @@ import {
   getCurrencyDisplayName,
   type RateStatusTone,
 } from '../lib/rates';
-import type { ConverterUserState, RateHistoryCache, RatesCache } from '../lib/storage';
-import { RateTrendChart } from './RateTrendChart';
+import type { ConverterUserState, RatesCache } from '../lib/storage';
 
 interface CalculatorPanelProps {
   state: ConverterUserState;
   availableCurrencies: string[];
   ratesCache: RatesCache;
-  historyCache: RateHistoryCache;
   statusMessage: string;
   statusTone: RateStatusTone;
   isRefreshing: boolean;
-  isHistoryLoading: boolean;
   onAmountChange: (value: string) => void;
   onFromChange: (code: string) => void;
   onToChange: (code: string) => void;
@@ -55,11 +52,9 @@ export function CalculatorPanel({
   state,
   availableCurrencies,
   ratesCache,
-  historyCache,
   statusMessage,
   statusTone,
   isRefreshing,
-  isHistoryLoading,
   onAmountChange,
   onFromChange,
   onToChange,
@@ -279,17 +274,6 @@ export function CalculatorPanel({
           </p>
         )}
       </div>
-
-      {/* Hairline Divider */}
-      <div className="my-6 border-t border-slate-200" />
-
-      {/* 7-Day Cached Rate Trend Chart */}
-      <RateTrendChart
-        fromCurrency={state.from}
-        toCurrency={state.to}
-        historyCache={historyCache}
-        isLoading={isHistoryLoading}
-      />
 
       {/* Hairline Divider */}
       <div className="my-6 border-t border-slate-200" />

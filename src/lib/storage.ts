@@ -14,17 +14,9 @@ export interface RatesCache {
   note?: string | null;
 }
 
-export interface RateHistoryCache {
-  schema: string;
-  lastChecked: number | null;
-  days: Record<string, Record<string, number>>;
-}
-
 export const CONVERTER_STATE_KEY = 'currency_converter_state_v1';
 export const RATES_STORAGE_KEY = 'frankfurter_rates_v2';
 export const RATES_CACHE_SCHEMA = 'frankfurter_cache_v2';
-export const HISTORY_STORAGE_KEY = 'currency_rate_history_v1';
-export const HISTORY_CACHE_SCHEMA = 'rate_history_v1';
 
 export const DEFAULT_CONVERTER_STATE: ConverterUserState = {
   amount: '1',
@@ -109,47 +101,6 @@ export function readRatesCache(): RatesCache | null {
 export function writeRatesCache(cache: RatesCache): void {
   try {
     window.localStorage.setItem(RATES_STORAGE_KEY, JSON.stringify(cache));
-  } catch {
-    // Ignore storage quota or private browsing write failures cleanly.
-  }
-}
-
-export function readRateHistoryCache(): RateHistoryCache {
-  try {
-    const raw = window.localStorage.getItem(HISTORY_STORAGE_KEY);
-    if (!raw) {
-      return { schema: HISTORY_CACHE_SCHEMA, lastChecked: null, days: {} };
-    }
-    const parsed = JSON.parse(raw) as Partial<RateHistoryCache> | null;
-    if (!parsed || typeof parsed !== 'object' || !parsed.days || typeof parsed.days !== 'object') {
-      return { schema: HISTORY_CACHE_SCHEMA, lastChecked: null, days: {} };
-    }
-    return {
-      schema: HISTORY_CACHE_SCHEMA,
-      lastChecked: typeof parsed.lastChecked === 'number' ? parsed.lastChecked : null,
-      days: parsed.days,
-    };
-  } catch {
-    return { schema: HISTORY_CACHE_SCHEMA, lastChecked: null, days: {} };
-  }
-}
-
-export function writeRateHistoryCache(cache: RateHistoryCache): void {
-  try {
-    const sortedDates = Object.keys(cache.days).sort();
-    const recentDates = sortedDates.slice(-30);
-    const trimmedDays: Record<string, Record<string, number>> = {};
-    for (const date of recentDates) {
-      trimmedDays[date] = cache.days[date];
-    }
-    window.localStorage.setItem(
-      HISTORY_STORAGE_KEY,
-      JSON.stringify({
-        schema: HISTORY_CACHE_SCHEMA,
-        lastChecked: cache.lastChecked,
-        days: trimmedDays,
-      })
-    );
   } catch {
     // Ignore storage quota or private browsing write failures cleanly.
   }

@@ -5,15 +5,12 @@ import { CrossRatesPanel } from './components/CrossRatesPanel';
 import {
   buildSortedCurrencyList,
   ensureExchangeRates,
-  ensureHistoricalRates,
-  getInitialHistorySnapshot,
   getInitialRatesSnapshot,
   type RatesLoadResult,
 } from './lib/rates';
 import {
   type ConverterUserState,
   DEFAULT_CONVERTER_STATE,
-  type RateHistoryCache,
   readConverterState,
   writeConverterState,
 } from './lib/storage';
@@ -25,11 +22,7 @@ export default function App() {
   const [ratesSnapshot, setRatesSnapshot] = useState<RatesLoadResult>(() =>
     getInitialRatesSnapshot()
   );
-  const [historyCache, setHistoryCache] = useState<RateHistoryCache>(() =>
-    getInitialHistorySnapshot(getInitialRatesSnapshot().cache)
-  );
   const [isRefreshing, setIsRefreshing] = useState(false);
-  const [isHistoryLoading, setIsHistoryLoading] = useState(false);
 
   const availableCurrencies = useMemo(
     () => buildSortedCurrencyList(ratesSnapshot.cache),
@@ -49,7 +42,6 @@ export default function App() {
 
   const syncRates = useCallback(async (force: boolean) => {
     setIsRefreshing(true);
-    setIsHistoryLoading(true);
     try {
       const result = await ensureExchangeRates({ force });
       setRatesSnapshot(result);
@@ -74,15 +66,8 @@ export default function App() {
         writeConverterState(reconciled);
         return reconciled;
       });
-
-      const updatedHistory = await ensureHistoricalRates({
-        force,
-        latestRatesCache: result.cache,
-      });
-      setHistoryCache(updatedHistory);
     } finally {
       setIsRefreshing(false);
-      setIsHistoryLoading(false);
     }
   }, []);
 
@@ -158,11 +143,9 @@ export default function App() {
               state={converterState}
               availableCurrencies={availableCurrencies}
               ratesCache={ratesSnapshot.cache}
-              historyCache={historyCache}
               statusMessage={ratesSnapshot.statusMessage}
               statusTone={ratesSnapshot.tone}
               isRefreshing={isRefreshing}
-              isHistoryLoading={isHistoryLoading}
               onAmountChange={handleAmountChange}
               onFromChange={handleFromChange}
               onToChange={handleToChange}
